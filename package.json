@@ -1,0 +1,17 @@
+{
+  "name": "upsy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "budo index.js:bundle.js"
+  },
+  "author": "Mr Speaker",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.83.0"
+  },
+  "devDependencies": {
+    "budo": "^9.3.0"
+  }
+}
