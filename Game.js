@@ -1,5 +1,4 @@
 const THREE = require("three");
-const geom = require("./geom/geom");
 const materials = require("./geom/materials");
 const Blerb = require("./entities/Blerb");
 const Chunk = require("./Chunk");
@@ -30,16 +29,16 @@ class Game {
 
     this.physics = new Physics();
     this.addGeom();
+    this.lightScene();
 
     this.entities = Array.from(new Array(15)).map(() => {
       const b = new Blerb(
-        Math.random() * 16 | 0,
-        ((Math.random() * 7 | 0) + 1) * 3,
-        Math.random() * 16 | 0);
+        Math.random() * this.w | 0,
+        0,
+        Math.random() * this.w | 0);
       this.scene.add(b);
       return b;
     });
-    this.lightScene();
 
     this.update = this.update.bind(this);
     requestAnimationFrame(this.update);
@@ -77,22 +76,18 @@ class Game {
 
   lightScene () {
     const {scene} = this;
-    const amb = new THREE.AmbientLight(0x999999);
+    scene.background = new THREE.Color(0xc0e9FD);
+    scene.fog = new THREE.Fog(0xc0e9FD, this.dist / 2, this.dist * 2);
+
+    const amb = new THREE.AmbientLight(0x555555);
     scene.add(amb);
 
-    scene.fog = new THREE.Fog(0xc0e9FD, this.dist / 2, this.dist * 2);
-    scene.background = new THREE.Color(0xc0e9FD);
-
-    //const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
-    //hemiLight.position.set(1, 1, 0).normalize();
-    //scene.add(hemiLight);
-
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-    dirLight.position.set(-0.5, 0.75, 0.5).normalize();
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    dirLight.position.set(-1, 0.5, 1).normalize();
     scene.add(dirLight);
 
-    const dirLight2 = new THREE.DirectionalLight(0xffffff, 1);
-    dirLight2.position.set(0.5, 0.75, -0.5).normalize();
+    const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.9);
+    dirLight2.position.set(1, 0.5, 1).normalize();
     scene.add(dirLight2);
   }
 
@@ -120,7 +115,7 @@ class Game {
       [0.5, 0.5, 0.5]
     ];
 
-    function buildPlane (u, v, w, xo, yo, zo, udir, vdir, depth, colIndex = 0) {
+    function buildFace (u, v, w, xo, yo, zo, udir, vdir, depth, colIndex = 0) {
       var widthHalf = 1 / 2;
       var heightHalf = 1 / 2;
       var depthHalf = depth / 2;
@@ -215,12 +210,12 @@ class Game {
     });
 
     // Add each face direction separetly (to support MultiMaterials)
-    faces[0].forEach(([x, y, z]) => buildPlane("z", "y", "x", x, y, z, -1, -1,  1, 0));
-    faces[1].forEach(([x, y, z]) => buildPlane("z", "y", "x", x, y, z,  1, -1, -1, 0));
-    faces[2].forEach(([x, y, z]) => buildPlane("x", "z", "y", x, y, z,  1,  1,  1, 2));
-    faces[3].forEach(([x, y, z]) => buildPlane("x", "z", "y", x, y, z,  1, -1, -1, 3));
-    faces[4].forEach(([x, y, z]) => buildPlane("x", "y", "z", x, y, z,  1, -1,  1, 1));
-    faces[5].forEach(([x, y, z]) => buildPlane("x", "y", "z", x, y, z, -1, -1, -1, 1));
+    faces[0].forEach(([x, y, z]) => buildFace("z", "y", "x", x, y, z, -1, -1,  1, 0));
+    faces[1].forEach(([x, y, z]) => buildFace("z", "y", "x", x, y, z,  1, -1, -1, 0));
+    faces[2].forEach(([x, y, z]) => buildFace("x", "z", "y", x, y, z,  1,  1,  1, 2));
+    faces[3].forEach(([x, y, z]) => buildFace("x", "z", "y", x, y, z,  1, -1, -1, 3));
+    faces[4].forEach(([x, y, z]) => buildFace("x", "y", "z", x, y, z,  1, -1,  1, 1));
+    faces[5].forEach(([x, y, z]) => buildFace("x", "y", "z", x, y, z, -1, -1, -1, 1));
 
     // Add groups for materials
     faces.reduce((total, face, i) => {

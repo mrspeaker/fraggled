@@ -3,12 +3,11 @@ class Chunk {
   constructor (w, h, x = 0, y = 0, z = 0) {
     this.w = w;
     this.h = h;
-
     this.x = x;
     this.y = y;
     this.z = z;
 
-    const isGround = () => Math.random() > 0.1;
+    const isGround = y => y === 0;
 
     this.data = Array.from(
       new Array(this.h),
@@ -16,12 +15,7 @@ class Chunk {
         new Array(this.w),
         (_, x) => Array.from(
           new Array(this.w),
-          (_, z) => {
-            //if (y % 3 === 1 && (x === 0 || z === 0)) return 1;
-            //if (y % 6 != 0) return 0;
-            if (y !== 0) return 0;
-            return 1;//isGround() ? 1 : 0
-          }
+          (_, z) => isGround(y) ? 1 : 0
         )
       )
     );
