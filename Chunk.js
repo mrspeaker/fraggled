@@ -39,6 +39,19 @@ class Chunk {
     this.isDirty = true;
   }
 
+  goRando () {
+    this.data.forEach((r, y) => {
+      r.forEach((w, x) => {
+        w.forEach((d, z) => {
+          if (y > 0) {
+            this.data[y][x][z] = Math.random() < 0.0001 ? 1 : 0;
+          }
+        });
+      });
+    });
+    this.isDirty = true;
+  }
+
 }
 
 module.exports = Chunk;

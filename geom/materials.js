@@ -5,6 +5,7 @@ const materials = {
   "white": new THREE.MeshLambertMaterial({ color: 0xffffff }),
   "green": new THREE.MeshLambertMaterial({ color: 0xff4444 }),
   "dark": new THREE.MeshPhongMaterial({ color: 0x2f2f2f, shininess: 100 }),
+  "verty": new THREE.MeshLambertMaterial({ color: 0x999999, vertexColors: THREE.VertexColors }),
   "debug": new THREE.MeshBasicMaterial({
     color: 0xff0000,
     wireframe: true

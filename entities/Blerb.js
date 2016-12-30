@@ -42,7 +42,7 @@ class Blerb extends THREE.Object3D {
       if (Math.random() < 0.01) {
         this.setState(Math.random() < 0.2 ? "stacking" : "building");
       }
-      if (Math.random() < 0.001) {
+      if (Math.random() < 0.002) {
         this.setState("bashing");
       }
       break;
@@ -52,7 +52,7 @@ class Blerb extends THREE.Object3D {
           chunk.setBlock(this.tx, this.ty, this.tz, 1);
           this.stateTime = 0;
         }
-        if (Math.random() < 0.5) {
+        if (Math.random() < 0.2) {
           this.setState("walking");
         }
       }
@@ -61,9 +61,9 @@ class Blerb extends THREE.Object3D {
       }
       break;
     case "stacking":
-      if (this.stateTime > 10) {
+      if (this.stateTime > 5) {
         if (this.ty < chunk.h - 1) {
-          chunk.setBlock(this.tx, this.ty, this.tz, 1);
+          chunk.setBlock(this.tx, this.ty, this.tz, 2);
           this.stateTime = 0;
         }
         if (Math.random() < 0.2) {
