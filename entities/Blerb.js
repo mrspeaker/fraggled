@@ -12,7 +12,7 @@ class Blerb extends THREE.Object3D {
     this.lastTy = this.ty;
     this.lastTz = this.tz;
     this.canFall = true;
-    this.h = 1.4;
+    this.h = 1.1;
 
     this.position.set(x, y + 1 + (this.h / 2), z);
     this.dir = Math.random() < 0.5 ? "x" : "z";

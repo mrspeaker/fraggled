@@ -44,7 +44,7 @@ class Chunk {
       r.forEach((w, x) => {
         w.forEach((d, z) => {
           if (y > 0) {
-            this.data[y][x][z] = Math.random() < 0.0001 ? 1 : 0;
+            this.data[y][x][z] = Math.random() < 0.05 ? 3 : 0;
           }
         });
       });
