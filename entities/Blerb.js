@@ -3,21 +3,32 @@ const geom = require("../geom/geom");
 const materials = require("../geom/materials");
 
 class Blerb extends THREE.Object3D {
-  constructor(x, y, z) {
+  constructor(x, y, z, cw, ch) {
     super();
-    this.tx = x | 0;
-    this.ty = y | 0;
-    this.tz = z | 0;
+    // NOTE: tx/ty/tz relative to chunk, not world
+    this.tx = (x % cw) | 0;
+    this.ty = (y % ch) | 0;
+    this.tz = (z % cw) | 0;
     this.lastTx = this.tx;
     this.lastTy = this.ty;
     this.lastTz = this.tz;
+
+    const blerbGeom = geom.blerb;
+    this.h = blerbGeom.parameters.height;
+    this.w = blerbGeom.parameters.width;
+    this.add(new THREE.Mesh(blerbGeom, materials.green));
+
+    // Some hair
+    const b2 = new THREE.Mesh(blerbGeom, materials.white);
+    this.add(b2);
+    b2.position.y += 0.6;
+    b2.scale.set(0.9, 0.1, 0.9);
+
     this.canFall = true;
-    this.h = 1.1;
 
     this.position.set(x, y + 1 + (this.h / 2), z);
     this.dir = Math.random() < 0.5 ? "x" : "z";
     this.speed = (Math.random() * 0.03 + 0.01) * (Math.random() < 0 ? -1 : 1);
-    this.add(new THREE.Mesh(geom.blerb, materials.green));
 
     this.state = "walking";
     this.stateTime = 0;

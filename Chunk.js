@@ -6,6 +6,7 @@ class Chunk {
     this.x = x;
     this.y = y;
     this.z = z;
+    this.id = x + "_" + y + "_" + z;
 
     const isGround = y => y === 0;
 

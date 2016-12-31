@@ -14,18 +14,21 @@ class Physics {
       e.lastTz = tz;
 
       position[dir] += e.speed;
-      if (position[dir] > chunk.w - 1) {
-        position[dir] = chunk.w - 1;
+      if (position[dir] < chunk[dir] * chunk.w) {
+        position[dir] = chunk[dir] * chunk.w;
         e.speed *= -1;
         //e.dir = Math.random() < 0.5 ? "x" : "z"
       }
-      if (position[dir] < 0) {
-        position[dir] = 0;
+
+      if (position[dir] > (chunk[dir] * chunk.w) + chunk.w - 1) {
+        position[dir] = (chunk[dir] * chunk.w) + chunk.w - 1;
         e.speed *= -1;
         //e.dir = Math.random() < 0.5 ? "x" : "z"
       }
-      e.tx = Math.round(position.x);
-      e.tz = Math.round(position.z);
+
+      e.tx = Math.round(position.x - (chunk.x * (chunk.w))) % chunk.w;
+      e.tz = Math.round(position.z - (chunk.z * (chunk.w))) % chunk.w;
+      //console.log(e.tx, e.tz, position.x, chunk.x)
 
       // Hit a block
       if (chunk.data[e.ty][e.tx][e.tz] === 1) {
@@ -33,8 +36,8 @@ class Physics {
           // Brick wall
           e.tx = tx;
           e.tz = tz;
-          position.x = e.tx;
-          position.z = e.tz;
+          position.x = e.tx + (chunk.x * chunk.w);
+          position.z = e.tz + (chunk.z * chunk.w);
           e.dir = Math.random() < 0.5 ? "x" : "z";
           e.speed *= -1;
         }
