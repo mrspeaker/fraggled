@@ -1,6 +1,6 @@
 const THREE = require("three");
 const makeChunkGeom = require("./geom/makeChunkGeom");
-const World = require("./World");
+const World = require("./world/World");
 const Physics = require("./Physics");
 
 class Game {

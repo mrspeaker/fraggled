@@ -1,5 +1,5 @@
 const Chunk = require("./Chunk");
-const Blerb = require("./entities/Blerb");
+const Blerb = require("../entities/Blerb");
 
 class World {
   constructor () {
