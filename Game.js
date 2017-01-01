@@ -70,6 +70,9 @@ class Game {
   }
 
   rechunk (ch) {
+    if (!this.world.chunks[ch].isDirty) {
+      return;
+    }
     setTimeout(()=> {
       // TODO: is this most efficient way? scene.remove/scene.add?
       this.scene.remove(this.geom[ch]);
