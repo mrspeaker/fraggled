@@ -8,7 +8,7 @@ function makeChunkGeom (c) {
   const indices = [];
   const normals = [];
   const uvs = [];
-  const colors = [];
+  // const colors = [];
 
   let vertexBufferOffset = 0;
   let indexBufferOffset = 0;
@@ -17,15 +17,8 @@ function makeChunkGeom (c) {
 
   const bg = new THREE.BufferGeometry();
 
-  // TODO: allow real colours
-  const cols = [
-    [0.2, 0.4, 0.5],
-    [0.1, 0.3, 0.4],
-    [1, 1, 1],
-    [0.5, 0.5, 0.5]
-  ];
+  function buildFace (u, v, w, xo, yo, zo, udir, vdir, depth) {
 
-  function buildFace (u, v, w, xo, yo, zo, udir, vdir, depth, colIndex = 0) {
     var widthHalf = 1 / 2;
     var heightHalf = 1 / 2;
     var depthHalf = depth / 2;
@@ -36,6 +29,7 @@ function makeChunkGeom (c) {
     for (let iy = 0; iy < 2; iy++) {
       const y = iy - heightHalf;
       for (let ix = 0; ix < 2; ix++) {
+
         const x = ix - widthHalf;
 
         vector[u] = x * udir;
@@ -56,9 +50,10 @@ function makeChunkGeom (c) {
         normals[vertexBufferOffset + 1] = vector.y;
         normals[vertexBufferOffset + 2] = vector.z;
 
-        colors[vertexBufferOffset] = cols[colIndex][0];
-        colors[vertexBufferOffset + 1] = cols[colIndex][1];
-        colors[vertexBufferOffset + 2] = cols[colIndex][2];
+        // // Colors (for AO)
+        // colors[vertexBufferOffset] = 2 * ix + (5 * iy);
+        // colors[vertexBufferOffset + 1] = 5 * ix + (5 * iy);
+        // colors[vertexBufferOffset + 2] = 5 * ix + iy ;
 
         // uvs
         uvs[uvBufferOffset] = ix;
@@ -117,12 +112,12 @@ function makeChunkGeom (c) {
   });
 
   // Add each face direction separetly (to support MultiMaterials)
-  faces[0].forEach(([x, y, z]) => buildFace("z", "y", "x", x, y, z, -1, -1,  1, 0));
-  faces[1].forEach(([x, y, z]) => buildFace("z", "y", "x", x, y, z,  1, -1, -1, 0));
-  faces[2].forEach(([x, y, z]) => buildFace("x", "z", "y", x, y, z,  1,  1,  1, 2));
-  faces[3].forEach(([x, y, z]) => buildFace("x", "z", "y", x, y, z,  1, -1, -1, 3));
-  faces[4].forEach(([x, y, z]) => buildFace("x", "y", "z", x, y, z,  1, -1,  1, 1));
-  faces[5].forEach(([x, y, z]) => buildFace("x", "y", "z", x, y, z, -1, -1, -1, 1));
+  faces[0].forEach(([x, y, z]) => buildFace("z", "y", "x", x, y, z, -1, -1,  1));
+  faces[1].forEach(([x, y, z]) => buildFace("z", "y", "x", x, y, z,  1, -1, -1));
+  faces[2].forEach(([x, y, z]) => buildFace("x", "z", "y", x, y, z,  1,  1,  1));
+  faces[3].forEach(([x, y, z]) => buildFace("x", "z", "y", x, y, z,  1, -1, -1));
+  faces[4].forEach(([x, y, z]) => buildFace("x", "y", "z", x, y, z,  1, -1,  1));
+  faces[5].forEach(([x, y, z]) => buildFace("x", "y", "z", x, y, z, -1, -1, -1));
 
   // Add groups for materials
   faces.reduce((total, face, i) => {
@@ -134,13 +129,13 @@ function makeChunkGeom (c) {
   bg.addAttribute("position", new THREE.BufferAttribute(new Float32Array(vertices), 3));
   bg.addAttribute("normal", new THREE.BufferAttribute(new Float32Array(normals), 3));
   bg.addAttribute("uv", new THREE.BufferAttribute(new Float32Array(uvs), 2));
-  bg.addAttribute("color", new THREE.BufferAttribute(new Float32Array(colors), 3));
+  // bg.addAttribute("color", new THREE.BufferAttribute(new Float32Array(colors), 3));
 
   // Create and position the mesh
   const mesh = new THREE.Mesh(bg, materials.building);
   mesh.position.x = c.x * c.w;
   mesh.position.z = c.z * c.w;
-  mesh.position.y = 0.5; // Offset so not vertically alligned, but bottom aligned
+  mesh.position.y = 0.5; // Offset so bottom-aligned, not vertically-alligned.
 
   const t1 = performance.now();
   //console.log("Chunk create: " + (t1 - t0).toFixed(0) + " milliseconds.");

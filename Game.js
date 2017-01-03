@@ -74,7 +74,6 @@ class Game {
       return;
     }
     setTimeout(()=> {
-      // TODO: is this most efficient way? scene.remove/scene.add?
       this.scene.remove(this.geom[ch]);
       this.geom[ch].geometry.dispose();
       this.geom[ch] = null;

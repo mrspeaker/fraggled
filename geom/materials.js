@@ -11,7 +11,8 @@ const materials = {
     wireframe: true
   }),
   "box": new THREE.MeshLambertMaterial({
-    map: THREE.ImageUtils.loadTexture("res/comb.jpg")
+    map: THREE.ImageUtils.loadTexture("res/comb.jpg"),
+    // vertexColors: THREE.VertexColors
   })
 };
 
