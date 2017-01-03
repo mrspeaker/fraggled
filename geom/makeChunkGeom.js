@@ -8,7 +8,6 @@ function makeChunkGeom (c) {
   const indices = [];
   const normals = [];
   const uvs = [];
-  // const colors = [];
 
   let vertexBufferOffset = 0;
   let indexBufferOffset = 0;
@@ -49,11 +48,6 @@ function makeChunkGeom (c) {
         normals[vertexBufferOffset] = vector.x;
         normals[vertexBufferOffset + 1] = vector.y;
         normals[vertexBufferOffset + 2] = vector.z;
-
-        // // Colors (for AO)
-        // colors[vertexBufferOffset] = 2 * ix + (5 * iy);
-        // colors[vertexBufferOffset + 1] = 5 * ix + (5 * iy);
-        // colors[vertexBufferOffset + 2] = 5 * ix + iy ;
 
         // uvs
         uvs[uvBufferOffset] = ix;
@@ -129,7 +123,6 @@ function makeChunkGeom (c) {
   bg.addAttribute("position", new THREE.BufferAttribute(new Float32Array(vertices), 3));
   bg.addAttribute("normal", new THREE.BufferAttribute(new Float32Array(normals), 3));
   bg.addAttribute("uv", new THREE.BufferAttribute(new Float32Array(uvs), 2));
-  // bg.addAttribute("color", new THREE.BufferAttribute(new Float32Array(colors), 3));
 
   // Create and position the mesh
   const mesh = new THREE.Mesh(bg, materials.building);

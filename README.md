@@ -38,3 +38,9 @@ For vertex 0, 0, 0 your look ups would be: Corner(-1, -1, -1), Side1(-1, -1, 0),
 * AOValue = vertexAO(Corner,Side1,Side2) / 3;
 
 Can clamp the value (in the shader) as it is usually way too dark. Also, doesn't fix errors caused by anisotropy filtering.
+
+## Add color to geometry
+
+(Also Required for AO).
+
+```bg.addAttribute("color", new THREE.BufferAttribute(new Float32Array(colors), 3));```
